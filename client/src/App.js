@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import 'whatwg-fetch';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.loadRoutesFromServer();
+  }
+
+  loadRoutesFromServer = () => {
+    // fetch returns a promise. If you are not familiar with promises, see
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+    fetch('/api/routes/fetchall').then((res) => {
+      console.log(res);
+    });
+  };
+
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    return <div className="container">{this.state.error && <p>{this.state.error}</p>}</div>;
   }
 }
 
-export default App;
+export default App; // Don’t forget to use export default!

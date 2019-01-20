@@ -13,30 +13,32 @@ export default class UploadRoute extends React.Component {
     this.state = {
       files: []
     };
+
+    this.fileReader = new FileReader();
+
+    this.fileReader.onload = e => {
+      let data = JSON.parse(e.target.result);
+      console.log(data);
+      fetch("/api/routes/postRoute", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(res => console.log(res));
+    };
   }
+
   handleInit() {
     console.log("FilePond instance has initialised", this.pond);
   }
+
   handleClick = () => {
-    const values = {
-      data: []
-    };
+    const data = [];
 
-    this.state.files.forEach(file => {
-      //const json = JSON.parse(file);
-      const value = {};
-      value["start_time"] = file.start_time;
-      value["coords"] = file.coords;
-      values.data.push(value);
+    this.pond.getFiles().forEach(File => {
+      this.fileReader.readAsText(File.file);
     });
-
-    fetch("/api/routes/postRoute", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(values)
-    }).then(res => console.log(res));
   };
 
   render() {
@@ -57,6 +59,8 @@ export default class UploadRoute extends React.Component {
             });
             console.log(this.state.files);
           }}
+          onprocessfile={(err, file) => this.onProcessFile(err, file)}
+          onprocessfilestart={file => console.log(file)}
         >
           {/* Update current files  */}
           {this.state.files.map(file => (

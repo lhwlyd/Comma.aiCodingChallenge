@@ -32,7 +32,8 @@ const PointSchema = new Schema({
 const RoutesSchema = new Schema(
   {
     start_time: Date,
-    data: [PointSchema]
+    data: [PointSchema],
+    end_time: Date
   },
   { timestamps: true }
 );

@@ -1,5 +1,4 @@
 const { Routes, Points } = require("../../models/Route");
-var fs = require("fs");
 
 module.exports = app => {
   /* Fetch all routes */
@@ -9,16 +8,27 @@ module.exports = app => {
     });
   });
 
-  /* post a new route */
+  /* post a new SINGLE route */
   app.post("/api/routes/postRoute", (req, res, next) => {
     const route = new Routes();
-    const data = req.body.data;
-    for (let i = 0; i < data.length; i++) {
-      // var content = fs.readFileSync("content.txt");
-      //let content = JSON.parse(files[i]);
+    const data = req.body;
+    route.start_time = Date(data.start_time);
+    route.end_time = Date(data.end_time);
 
-      console.log("received", data[i]);
+    const coords = data.coords;
+    let points = [];
+    for (let i = 0; i < coords.length; i++) {
+      let point = new Points();
+      let coord = coords[i];
+      point.coordinates = [parseFloat(coord.lat), parseFloat(coord.lng)];
+      point.speed = parseFloat(coord.speed);
+      point.distance = parseFloat(coord.dist);
+      point.index = Number(coord.index);
+
+      points.push(point);
     }
+
+    console.log(points);
 
     // points.map(item => {
     //   let newPoint = new Points();
@@ -30,7 +40,7 @@ module.exports = app => {
     //
     //   route.data.push(newPoint);
     // });
-    //
+
     // route.save((err, event) => {
     //   if (err) {
     //     return res.send({

@@ -14,12 +14,16 @@ const path = require("path");
 const API_PORT = process.env.API_PORT || 3001;
 
 // db config -- set your URI from mLab in secrets.js
-mongoose.connect(getSecret("dbUri"));
+mongoose.connect(
+  getSecret("dbUri"),
+  { useNewUrlParser: true }
+);
 var db = mongoose.connection;
+db.once("open", () => console.log("connected to the database"));
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // other routes and stuff
-
+mongoose.Promise = global.Promise;
 // and create our instances
 const app = express();
 app.use(express.urlencoded({ extended: true }));

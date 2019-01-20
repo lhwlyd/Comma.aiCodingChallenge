@@ -26,8 +26,8 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 mongoose.Promise = global.Promise;
 // and create our instances
 const app = express();
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
-app.use(express.json({ limit: "10mb", extended: true }));
+app.use(express.urlencoded({ limit: "400mb", extended: true }));
+app.use(express.json({ limit: "400mb", extended: true }));
 app.use(express.static(path.join(__dirname, "client", "build")));
 
 // API routes

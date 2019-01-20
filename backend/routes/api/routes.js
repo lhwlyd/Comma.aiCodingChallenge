@@ -3,17 +3,25 @@ const { Routes, Points } = require("../../models/Route");
 module.exports = app => {
   /* Fetch all routes */
   app.post("/api/routes/fetchall", (req, res, next) => {
-    Route.find({}, function(err, routes) {
+    Routes.find({}, function(err, routes) {
       res.send(routes);
     });
+  });
+
+  /* Fetch the first route */
+  app.post("/api/routes/fetchfirst", (req, res, next) => {
+    Routes.findOne()
+      .sort({ start_time: -1 })
+      .exec(function(err, route) {
+        if (err) throw err;
+        res.send(route);
+      });
   });
 
   /* post a new SINGLE route */
   app.post("/api/routes/postRoute", (req, res, next) => {
     const route = new Routes();
     const data = req.body;
-    route.start_time = Date(data.start_time);
-    route.end_time = Date(data.end_time);
 
     const coords = data.coords;
     let points = [];
@@ -29,29 +37,22 @@ module.exports = app => {
     }
 
     console.log(points);
+    route.start_time = data.start_time;
+    route.end_time = data.end_time;
+    route.data = points;
 
-    // points.map(item => {
-    //   let newPoint = new Points();
-    //
-    //   newPoint.coordinates = [item.lat, item.lng];
-    //   newPoint.speed = item.speed;
-    //   newPoint.distance = item.dist;
-    //   newPoint.index = item.index;
-    //
-    //   route.data.push(newPoint);
-    // });
-
-    // route.save((err, event) => {
-    //   if (err) {
-    //     return res.send({
-    //       success: false,
-    //       message: "Error: Server error when creating new route"
-    //     });
-    //   }
-    //   return res.send({
-    //     success: true,
-    //     message: "Created route"
-    //   });
-    // });
+    route.save((err, event) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error: creating new route"
+        });
+      }
+      console.log(route);
+      return res.send({
+        success: true,
+        message: "Created route"
+      });
+    });
   });
 };

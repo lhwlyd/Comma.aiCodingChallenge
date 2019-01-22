@@ -1,21 +1,65 @@
-const { Routes, Points } = require("../../models/Route");
+const { Routes, Points, _Routes_Ids } = require("../../models/Route");
+const mongoose = require("mongoose");
 
 module.exports = app => {
   /* Fetch all routes */
   app.post("/api/routes/fetchall", (req, res, next) => {
     Routes.find({}, function(err, routes) {
+      if (err) throw err;
       res.send(routes);
     });
   });
 
-  /* Fetch the first route */
-  app.post("/api/routes/fetchfirst", (req, res, next) => {
-    Routes.findOne()
-      .sort({ start_time: -1 })
-      .exec(function(err, route) {
-        if (err) throw err;
-        res.send(route);
+  /* Fetch all the ids in the db */
+  app.post("/api/routes/fetchids", (req, res, next) => {
+    console.log("fetching ids..");
+    _Routes_Ids.find({}, function(err, routesIds) {
+      if (err) throw err;
+      let ids = routesIds.map(routeId => routeId.routeId);
+      res.send(ids);
+    });
+    console.log("finished fetching ids!");
+  });
+
+  /* DO NOT USE THIS Create a collection of existing ids, dev only */
+  app.post("/api/routes/_create_ids_dev", (req, res, next) => {
+    console.log("creating ids collection..");
+    Routes.find({}, function(err, routes) {
+      if (err) throw err;
+      routes.forEach(route => {
+        let id = new _Routes_Ids();
+        id.routeId = route._id;
+        id.save((err, event) => {
+          if (err) throw err;
+        });
       });
+
+      console.log("ids collection created");
+    });
+  });
+
+  /* Fetch one route with id */
+  app.post("/api/routes/fetchone", (req, res, next) => {
+    const { body } = req;
+    const { id } = body;
+    Routes.findById(id, "data", function(err, route) {
+      if (err) {
+        throw err;
+        return res.send({
+          success: false,
+          message: "Error: " + err
+        });
+      }
+      return res.send(route);
+    });
+  });
+
+  /* Fetch a random? route, for dev only */
+  app.post("/api/routes/fetchfirst", (req, res, next) => {
+    Routes.findOne().exec(function(err, route) {
+      if (err) throw err;
+      res.send(route);
+    });
   });
 
   /* post a new SINGLE route */
@@ -36,7 +80,6 @@ module.exports = app => {
       points.push(point);
     }
 
-    console.log(points);
     route.start_time = data.start_time;
     route.end_time = data.end_time;
     route.data = points;
@@ -48,7 +91,6 @@ module.exports = app => {
           message: "Error: creating new route"
         });
       }
-      console.log(route);
       return res.send({
         success: true,
         message: "Created route"

@@ -38,7 +38,13 @@ const RoutesSchema = new Schema(
   { timestamps: true }
 );
 
+const RouteIdSchema = new Schema({
+  routeId: String
+});
+
 let Routes = mongoose.model("Routes", RoutesSchema);
 let Points = mongoose.model("Points", PointSchema);
+let _Routes_Ids = mongoose.model("_Routes_Ids", RouteIdSchema);
+
 // export our module to use in server.js
-export { Routes, Points };
+export { Routes, Points, _Routes_Ids };

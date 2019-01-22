@@ -11,7 +11,7 @@ import { getSecret } from "./secrets";
 import { Routes } from "./models/Route";
 const path = require("path");
 // ... removed for brevity
-const API_PORT = process.env.API_PORT || 3001;
+const API_PORT = process.env.PORT || 3001;
 
 // db config -- set your URI from mLab in secrets.js
 mongoose.connect(

@@ -7,7 +7,6 @@ import logger from "morgan";
 import mongoose from "mongoose";
 
 // server.js
-import { getSecret } from "./secrets";
 import { Routes } from "./models/Route";
 const path = require("path");
 // ... removed for brevity

@@ -15,7 +15,7 @@ const API_PORT = process.env.PORT || 3001;
 
 // db config -- set your URI from mLab in secrets.js
 mongoose.connect(
-  getSecret("dbUri"),
+  "mongodb://lhwlyd:LhwLyd12@practice-shard-00-00-nmjo9.azure.mongodb.net:27017,practice-shard-00-01-nmjo9.azure.mongodb.net:27017,practice-shard-00-02-nmjo9.azure.mongodb.net:27017/test?ssl=true&replicaSet=Practice-shard-0&authSource=admin&retryWrites=true",
   { useNewUrlParser: true }
 );
 var db = mongoose.connection;

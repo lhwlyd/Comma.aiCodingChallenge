@@ -42,7 +42,7 @@ module.exports = app => {
   app.post("/api/routes/fetchone", (req, res, next) => {
     const { body } = req;
     const { id } = body;
-    Routes.findById(id, "data", function(err, route) {
+    Routes.findById(id, "data start_time", function(err, route) {
       if (err) {
         throw err;
         return res.send({

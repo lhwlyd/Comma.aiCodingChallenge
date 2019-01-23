@@ -33,18 +33,17 @@ class SimpleMap extends Component {
   };
 
   async f(id) {
-    fetch("/api/routes/fetchone", {
+    return fetch("/api/routes/fetchone", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ id: id })
-    }).then(res => {
-      if (res.success === false) console.log("bad id");
-      res.json().then(data => {
+    })
+      .then(res => res.json())
+      .then(data => {
         this.processData(data);
       });
-    });
   }
 
   getGoogleMaps() {
@@ -97,11 +96,7 @@ class SimpleMap extends Component {
       method: "POST"
     })
       .then(res => res.json())
-      .then(ids => {
-        ids.forEach(id => {
-          this.f(id);
-        });
-      });
+      .then(ids => ids.map(async id => await this.f(id)));
   };
 
   getColor = speed => {
@@ -160,6 +155,7 @@ class SimpleMap extends Component {
         }
       }
       let avgSpeed = sumSpeed / calcGap;
+      console.log(avgSpeed);
       infoWindow.setContent(
         "Current average speed: " + avgSpeed.toFixed(2) + " miles per hour."
       );

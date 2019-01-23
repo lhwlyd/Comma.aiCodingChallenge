@@ -10,7 +10,9 @@ import mongoose from "mongoose";
 import { Routes } from "./models/Route";
 const path = require("path");
 // ... removed for brevity
-const API_PORT = process.env.PORT || 3001;
+//const API_PORT = process.env.PORT || 3001;
+const server_port = process.env.PORT || 3001;
+const server_host = 3001 || "0.0.0.0";
 
 // db config -- set your URI from mLab in secrets.js
 mongoose.connect(
@@ -36,6 +38,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "client", "public", "index.html"));
 });
 
-app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
-
+app.listen(server_port, server_host, function() {
+  console.log("Listening on port %d", server_port);
+});
 module.exports = app;

@@ -19,7 +19,7 @@
     "start:client": "cd client && yarn start",
     "start":"concurrently \"yarn start:server\" \"yarn start:client\"",
     "start:dev":"concurrently \"yarn start:server\" \"yarn start:client\"",
-    "heroku-postbuild": "cd client && yarn && yarn start"
+    "heroku-postbuild": "cd client && yarn && yarn build"
   },
   "devDependencies": {}
 }

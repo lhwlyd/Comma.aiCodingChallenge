@@ -155,7 +155,6 @@ class SimpleMap extends Component {
         }
       }
       let avgSpeed = sumSpeed / calcGap;
-      console.log(avgSpeed);
       infoWindow.setContent(
         "Current average speed: " + avgSpeed.toFixed(2) + " miles per hour."
       );

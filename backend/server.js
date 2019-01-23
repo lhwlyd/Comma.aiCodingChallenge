@@ -29,7 +29,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.urlencoded({ limit: "400mb", extended: true }));
 app.use(express.json({ limit: "400mb", extended: true }));
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
 // API routes
 require("./routes")(app);

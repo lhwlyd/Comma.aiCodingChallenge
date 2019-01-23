@@ -18,7 +18,8 @@
     "start:server": "cd backend && nodemon server.js --exec babel-node --presets es2015,stage-0",
     "start:client": "cd client && yarn start",
     "start":"concurrently \"yarn start:server\" \"yarn start:client\"",
-    "start:dev":"concurrently \"yarn start:server\" \"yarn start:client\""
+    "start:dev":"concurrently \"yarn start:server\" \"yarn start:client\"",
+    "heroku-postbuild": "cd client && yarn && yarn start"
   },
   "devDependencies": {}
 }
